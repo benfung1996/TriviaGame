@@ -11,6 +11,7 @@ $(document).ready(function() {
     var intervalId;
 
     $("#startBtn").on("click", start);
+    $("#startOverBtn").on("click", startOver);
     
     var trivia = {
         questions: [
@@ -33,6 +34,8 @@ $(document).ready(function() {
     }
 
     function displayQuestion() {
+
+        intervalId = setInterval(decrement, 1000);
 
         $("#question").html("<h3>" + trivia.questions[count].question + "</h3>");
 
@@ -80,23 +83,45 @@ $(document).ready(function() {
 
         if (count === trivia.questions.length) {
             stop();
+            setTimeout(scoreboard, 3000);
+            count = 0;
+        }
+        else {
+        setTimeout(reset, 3000);
         }
 
-        setTimeout(reset, 3000);
-
     };
+
+    function scoreboard() {
+        $("#timeUp").empty();
+        $("#choices").empty();
+        $("#showNum").empty();
+        $("#question").empty();
+        $("#timeUp").append("Correct: " + correct + "!");
+        $("#timeUp").append("Incorrect: " + incorrect + "!");
+        $("#startOverBtn").show();
+        $("#startOverBtn").html("<button>Start Over?</button>");
+    }
 
     function reset() {
         $("#choices").html("");
         $("#timeUp").html("");
         number = 3;
-        intervalId = setInterval(decrement, 1000);
         displayQuestion();
     }
 
     function start() {
         $("#startBtn").hide();
-        intervalId = setInterval(decrement, 1000);
+        $("#startOverBtn").hide();
+        displayQuestion();
+    }
+
+    function startOver() {
+        $("#startOverBtn").hide();
+        $("#timeUp").empty();
+        correct = 0;
+        incorrect = 0;
+        number = 3;
         displayQuestion();
     }
 
@@ -109,6 +134,7 @@ $(document).ready(function() {
         $("#showNum").html("<h2> Time Remaining: " + number + " Seconds </h2>");
 
         if (number === 0) {
+            incorrect++;
             stop();
             $("#timeUp").html("<h2> Time Up !! </h2>");
             displayAnswer();
