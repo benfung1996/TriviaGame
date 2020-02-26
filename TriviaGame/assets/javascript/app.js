@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    var number = 3;
+    var number = 15;
 
     var count = 0;
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
     function reset() {
         $("#choices").html("");
         $("#timeUp").html("");
-        number = 3;
+        number = 15;
         displayQuestion();
     }
 
@@ -121,7 +121,7 @@ $(document).ready(function() {
         $("#timeUp").empty();
         correct = 0;
         incorrect = 0;
-        number = 3;
+        number = 15;
         displayQuestion();
     }
 
