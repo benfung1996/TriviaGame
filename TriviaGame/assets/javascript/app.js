@@ -4,30 +4,30 @@ $(document).ready(function() {
 
     var count = 0;
 
-    var correct = false;
+    var correct = 0;
 
-    var wins = 0;
-
-    var losses = 0;
+    var incorrect = 0;
 
     var intervalId;
 
+    $("#startBtn").on("click", start);
+    
     var trivia = {
         questions: [
             {
                 question:"What are dogs most closely related to?",
                 choices: ["bears","pigs","cats","wolves"],
-                answer: "wolves"
+                answer: 3
             },
             {
                 question:"Akita, a dog, is a national treasure of which country?",
                 choices: ["Japan", "Spain", "Italy", "China"],
-                answer: "Japan"
+                answer: 0
             },
             {
                 question:"How many bones does a dog have in its spine?",
                 choices: ["12", "25", "31", "27"],
-                answer: "27"
+                answer: 3
             },
         ]
     }
@@ -36,16 +36,20 @@ $(document).ready(function() {
 
         $("#question").html("<h3>" + trivia.questions[count].question + "</h3>");
 
-        for ( var i = 0; i < 4; i++) {
+        for ( var i = 0; i < trivia.questions[count].choices.length; i++) {
 
-            var list = trivia.questions[count].choices[i];
-            console.log(list);
-            $("#choices").append("<button class='list-group-item'>" + trivia.questions[count].choices[i] + "</button>");
+            var choices = $("<button>");
+            choices.text(trivia.questions[count].choices[i]);
+            choices.attr({"data-index": i });
+            choices.addClass("multipleChoices", "list-group-item");
+            $("#choices").append(choices);
+            console.log(choices);
             
         };
 
-        $(".list-group-item").on("click",function() {
-            userselect = $(this).val();
+        $(".multipleChoices").on("click",function() {
+            userselect = $(this).data("index");
+            console.log(userselect);
             clearInterval(intervalId);
             checkAnswer();
         });
@@ -55,21 +59,19 @@ $(document).ready(function() {
     function checkAnswer() {
 
         if (userselect == trivia.questions[count].answer) {
-            correct === true;
             $("#timeUp").html("<h2> Correct! </h2>");
-            wins++;
+            correct++;
         }
         else {
-            correct === false;
             $("#timeUp").html("<h2> Nope! </h2>");
-            losses++;
+            incorrect++;
         }
 
         displayAnswer();
     };
 
     function displayAnswer() {
-        $("#question").html("<h3> Answer: " + trivia.questions[count].answer + "</h3>");
+        $("#question").html("<h3> Answer: " + trivia.questions[count].choices[trivia.questions[count].answer] + "</h3>");
         nextQuestion();
     };
 
@@ -112,7 +114,5 @@ $(document).ready(function() {
             displayAnswer();
         }
     }
-
-    $("#startBtn").on("click", start);
 
 });
